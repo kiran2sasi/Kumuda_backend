@@ -1,0 +1,195 @@
+openapi: 3.0.1
+info:
+  title:  TrainingCourses Service
+  description: TrainingCourses Service
+  version: v1
+servers:
+  - url: http://localhost:5001
+    description: Local Dev Server
+paths:
+  /TrainingCourses/getAll:
+    get:
+      tags:
+        - trainingcourses
+      parameters:
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/directionParam"
+        - $ref: "#/components/parameters/sortByFieldParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingCoursesResultDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+  /TrainingCourses/get:
+    get:
+      tags:
+        - trainingcourses
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingCoursesDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /TrainingCourses/create:
+    post:
+      tags:
+        - trainingcourses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainingCoursesDto"
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingCoursesDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /TrainingCourses/update:
+    put:
+      tags:
+        - trainingcourses
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainingCoursesDto"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainingCoursesDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /TrainingCourses/delete:
+    delete:
+      tags:
+        - trainingcourses
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+components:
+  parameters:
+    siNo:
+        name: siNo
+        in: query
+        description: siNo
+        required: true
+        schema:
+          type: string
+    limitParam:
+      name: Limit
+      in: query
+      schema:
+        type: integer
+        nullable: true
+    directionParam:
+      name: Direction
+      in: query
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+    sortByFieldParam:
+      name: SortByField
+      in: query
+      schema:
+        type: string
+        nullable: true
+  responses:
+    Success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    ResourceNotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnAcceptableInputs:
+      description: Invalid Inputs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+  schemas:
+    MessageDto:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    TrainingCoursesResultDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrainingCoursesDto"
+    TrainingCoursesDto:
+      type: object
+      properties:
+        siNo:
+          type: string
+        facultyname:
+          type: string
+        programme:
+          type: string
+        duration:
+          type: string
+        organnizedBy:
+          type: string
+        apiScore:
+          type: string
