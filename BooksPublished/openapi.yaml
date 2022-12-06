@@ -1,0 +1,201 @@
+openapi: 3.0.1
+info:
+  title: BooksPublished Service
+  description: BooksPublished Service
+  version: v1
+servers:
+  - url: http://localhost:5001
+    description: Local Dev Server
+paths:
+  /BooksPublished/getAll:
+    get:
+      tags:
+        - BooksPublished
+      parameters:
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/directionParam"
+        - $ref: "#/components/parameters/sortByFieldParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksPublishedResultDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+  /BooksPublished/get:
+    get:
+      tags:
+        - BooksPublished
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksPublishedDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /BooksPublished/create:
+    post:
+      tags:
+        - BooksPublished
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BooksPublishedDto"
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksPublishedDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /BooksPublished/update:
+    put:
+      tags:
+        - BooksPublished
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BooksPublishedDto"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BooksPublishedDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /BooksPublished/delete:
+    delete:
+      tags:
+        - BooksPublished
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+components:
+  parameters:
+    siNo:
+        name: siNo
+        in: query
+        description: siNo
+        required: true
+        schema:
+          type: string
+    limitParam:
+      name: Limit
+      in: query
+      schema:
+        type: integer
+        nullable: true
+    directionParam:
+      name: Direction
+      in: query
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+    sortByFieldParam:
+      name: SortByField
+      in: query
+      schema:
+        type: string
+        nullable: true
+  responses:
+    Success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    ResourceNotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnAcceptableInputs:
+      description: Invalid Inputs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+  schemas:
+    MessageDto:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    BooksPublishedResultDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/BooksPublishedDto"
+    BooksPublishedDto:
+      type: object
+      properties:
+        siNo:
+          type: string
+        facultyname:
+          type: string
+        tittlewithpageNos:
+          type: string
+        editor:
+          type: string
+        iSSNorISBNno:
+          type: string
+        whetherpeerreviewed:
+          type: string
+        coauthors:
+          type: string
+        mainauthor:
+          type: string
+        apiScore:
+          type: string
