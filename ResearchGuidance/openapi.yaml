@@ -1,0 +1,197 @@
+openapi: 3.0.1
+info:
+  title: ResearchGuidance Service
+  description: ResearchGuidance Service
+  version: v1
+servers:
+  - url: http://localhost:5001
+    description: Local Dev Server
+paths:
+  /ResearchGuidance/getAll:
+    get:
+      tags:
+        - researchguidance
+      parameters:
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/directionParam"
+        - $ref: "#/components/parameters/sortByFieldParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchGuidanceResultDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+  /ResearchGuidance/get:
+    get:
+      tags:
+        - researchguidance
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchGuidanceDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /ResearchGuidance/create:
+    post:
+      tags:
+        - researchguidance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResearchGuidanceDto"
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchGuidanceDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /ResearchGuidance/update:
+    put:
+      tags:
+        - researchguidance
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResearchGuidanceDto"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResearchGuidanceDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /ResearchGuidance/delete:
+    delete:
+      tags:
+        - researchguidance
+      parameters:
+        - $ref: "#/components/parameters/siNo"
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+components:
+  parameters:
+    siNo:
+        name: siNo
+        in: query
+        description: siNo
+        required: true
+        schema:
+          type: string
+    limitParam:
+      name: Limit
+      in: query
+      schema:
+        type: integer
+        nullable: true
+    directionParam:
+      name: Direction
+      in: query
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+    sortByFieldParam:
+      name: SortByField
+      in: query
+      schema:
+        type: string
+        nullable: true
+  responses:
+    Success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    ResourceNotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnAcceptableInputs:
+      description: Invalid Inputs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+  schemas:
+    MessageDto:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    ResearchGuidanceResultDto:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResearchGuidanceDto"
+    ResearchGuidanceDto:
+      type: object
+      properties:
+        siNo:
+          type: string
+        facultyname:
+          type: string
+        degree:
+          type: string
+        numberEnrolled:
+          type: string
+        thesisSubmitted:
+          type: string
+        degreeAwarded:
+          type: string
+        apiScore:
+          type: string
