@@ -1,0 +1,211 @@
+openapi: 3.0.1
+info:
+  title: Appraisal Service
+  description: Appraisal Service
+  version: v1
+servers:
+  - url: http://localhost:8080
+    description: Local Dev Server
+paths:
+  /teachingProcess/getAll:
+    get:
+      tags:
+        - Teaching
+      # parameters:
+      #   - $ref: "#/components/parameters/limitParam"
+      #   - $ref: "#/components/parameters/directionParam"
+      #   - $ref: "#/components/parameters/sortByFieldParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeachingPagedResultData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+  /teachingProcess/get:
+    get:
+      tags:
+        - Teaching
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeachingData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /teachingProcess/create:
+    post:
+      tags:
+        - Teaching
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeachingData"
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeachingData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /teachingProcess/update:
+    put:
+      tags:
+        - Teaching
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeachingData"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeachingData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+  /teachingProcess/delete:
+    delete:
+      tags:
+        - Teaching
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    idParam:
+      name: Id
+      in: query
+      required: true
+      schema:
+        type: string
+    # limitParam:
+    #   name: Limit
+    #   in: query
+    #   schema:
+    #     type: integer
+    #     nullable: true
+    # directionParam:
+    #   name: Direction
+    #   in: query
+    #   schema:
+    #     type: string
+    #     enum:
+    #       - asc
+    #       - desc
+    #     default: asc
+    # sortByFieldParam:
+    #   name: SortByField
+    #   in: query
+    #   schema:
+    #     type: string
+    #     nullable: true
+  responses:
+    Success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageData"
+    ResourceNotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageData"
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageData"
+    UnAcceptableInputs:
+      description: Invalid Inputs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageData"
+  schemas:
+    MessageData:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    TeachingPagedResultData:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeachingData"
+    TeachingData:
+      type: object
+      properties:
+        siNo:
+          type: string
+        course:
+          type: string
+        level:
+          type: string
+        modeOfTeaching:
+          type: string
+        classesAllotted:
+          type: number
+        classesConducted:
+          type: number
+        facultyName: 
+          type: string
+      # required:
+      #   - appointmentType
+      #   - appointmentStatus
+      #   - appointmentDate
+      #   - slotTime
+      #   - doctorId
+      #   - symptoms
+      #   - slotId
+      #   - patientId
+
+
