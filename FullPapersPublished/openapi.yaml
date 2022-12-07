@@ -1,0 +1,189 @@
+openapi: '3.0.0'
+info:
+  title: APPRAISLES
+  version: '2.0'
+servers:
+  - url: http://localhost:8000
+
+paths: 
+  /CreateFullPapersPublished:
+    post:
+      tags:
+        - fullpaper
+      description:  CreateFullPapersPublished
+      operationId: CreateFullPapersPublished
+      requestBody:
+        description: CreateFullPapersPublished
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullpapersData'
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullpapersData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+  /GetFullPapersPublished:
+    get:
+      tags:
+        - fullpaper
+      description:  Get FullPapersPublished
+      operationId:  Get FullPapersPublished 
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullpapersData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+  
+  /GetFullPapersPublished/{Facultyname}:
+    get:
+      tags:
+        - fullpaper
+      parameters:
+        - name: Facultyname
+          in: path
+          description: Facultyname
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullpapersData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+  /UpdateFullPapersPublished/{Facultyname}:
+    put:
+      tags:
+        - fullpaper
+      description:  UpdateFullPapersPublished
+      operationId: UpdateFullPapersPublished
+      parameters:
+        - name: Facultyname
+          in: path
+          description: Facultyname
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: UpdateFullPapersPublished
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullpapersData'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullpapersData"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+  /deleteFullPapersPublished/{Facultyname}:
+    delete:
+      tags:
+        - fullpaper
+      description:  deleteFullPapersPublished
+      operationId: DELETEFullPapersPublished
+      parameters:
+        - name: Facultyname
+          in: path
+          description: Facultyname
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+
+
+components:
+  responses:
+    Success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    ResourceNotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnAcceptableInputs:
+      description: Invalid Inputs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+  schemas:
+    MessageDto:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    FullpapersData:
+      type: object
+      properties:
+        SlNo:
+          type: number
+        Facultyname:
+          type: string
+        tittlewithpageNos:
+          type: string
+        detailsofjournal:
+          type: string
+        ISSNorISBNno:
+          type: string
+        coAuthors:
+          type: string
+        mainauthor:
+          type: string
+        apiScore:
+          type: string
+    
+  
